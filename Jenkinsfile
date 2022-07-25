@@ -11,8 +11,8 @@ pipeline {
         AWS_EB_APP_VERSION = "${BUILD_ID}" // when you want to roll back
         AWS_EB_ENVIRONMENT = "Javawebapp2-env"
 
-        // SONAR_IP = "54.226.50.200"
-        // SONAR_TOKEN = "sqp_aa3cba40e3342d9cff9044e498766a66cf8cc0cc"
+        SONAR_IP = "54.226.50.200 "
+        SONAR_TOKEN = "sqp_eee5935772bd1837c9c838d2bfb66655b12b22cc"
 
     }
     stages {
@@ -47,7 +47,18 @@ pipeline {
                 }
             }
         }
+        stage('Quality Scan'){
+            steps {
+                sh '''
 
+                mvn clean verify sonar:sonar \
+                    -Dsonar.projectKey=test1212 \
+                    -Dsonar.host.url=http://$SONAR_IP \
+                    -Dsonar.login=$SONAR_TOKEN
+
+                '''
+            }
+        }
         stage('Package') {
             steps {
                 
